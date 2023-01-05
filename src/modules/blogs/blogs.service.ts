@@ -45,7 +45,7 @@ export class BlogsService {
 
   async findAll() {
     try {
-      const blog = await this.blogRepository.find({
+      const blog = await this.blogRepository.find({where:{user:{isActive:true}},
         relations: {
           user: true,
         },
@@ -86,7 +86,7 @@ export class BlogsService {
 
   async findOne(id: string) {
     try {
-      const blog = await this.blogRepository.findOne({ where: { id: id }, relations: {
+      const blog = await this.blogRepository.findOne({ where: { id: id ,user:{isActive:true}}, relations: {
         user: true,
       } });
       if (!blog) {
@@ -113,7 +113,7 @@ export class BlogsService {
       const body = { ...updateBlogDto };
       const user = currentUser.id;
       const findBlog = await this.blogRepository.findOne({
-        where: { id: id },
+        where: { id: id,user:{isActive:true}} ,
         relations: { user: true },
       });
       if (findBlog?.user?.id === user) {
