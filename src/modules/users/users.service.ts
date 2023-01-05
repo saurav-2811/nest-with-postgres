@@ -37,15 +37,24 @@ export class UsersService {
         email,
         password: newPassword,
       });
+      await this.userRepository.save(user );
       const accessToken = await generateAccessToken(user);
       const refreshToken = await generateRefreshToken(user);
-      await this.userRepository.save({ ...user, refreshToken });
+      await this.userRepository.update(user.id,{refreshToken} );
 
       return { accessToken, refreshToken };
     } catch (error) {
       if (error.code == 23505) {
         throw new ConflictException(`email already exists`);
-      } else throw new InternalServerErrorException();
+      }
+      console.log(error)
+      if (error.response) {
+        throw new HttpException(
+          error.response.message,
+          error.response.statusCode,
+        );
+      }
+         else throw new InternalServerErrorException();
     }
   }
 

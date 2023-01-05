@@ -25,7 +25,7 @@ export class User {
   @Column({select:false})
   password: string;
 
-  @Column()
+  @Column({nullable: true})
   refreshToken: String;
 
   @Column({ default: true })
