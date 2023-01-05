@@ -1,32 +1,42 @@
-import { Blog } from "src/modules/blogs/entities/blog.entity";
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-
+import { Blog } from 'src/modules/blogs/entities/blog.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinTable,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column("varchar", { length: 100 })
+  @Column('varchar', { length: 100 })
   firstName: string;
 
-  @Column("varchar", { length: 1000 })
+  @Column('varchar', { length: 1000,nullable: true})
   lastName: string;
 
-  @Column("varchar",{unique:true})
+  @Column('varchar', { unique: true })
   email: string;
 
-  @Column()
+  @Column({select:false})
   password: string;
 
-  @Column({default:true})
+  @Column()
+  refreshToken: String;
+
+  @Column({ default: true })
   isActive: boolean;
 
-  @OneToMany(()=>Blog,(blog)=>blog.user)
-  blogs:Blog[]
+  @OneToMany(() => Blog, (blog) => blog.user) 
+  blogs: Blog[];
 
   @CreateDateColumn()
   createdAt: Date;
 
   @UpdateDateColumn()
-  updatedAt: Date;  
+  updatedAt: Date;
 }
